@@ -1,14 +1,15 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import ThemeProvider, { useThemeContent } from "../context/themeContext";
 //import { Cabecalho } from "../components/cabecalho";
 export default function Index() {
 
-  const { temaAtual } = useThemeContent()
+  const { temaAtual, selectTheme } = useThemeContent()
 
   return (
       <View style={styles.container}>
         <Text>{temaAtual}</Text>
+        <Button title="trocar" onPress={selectTheme}></Button>
       </View>
   );
 }
