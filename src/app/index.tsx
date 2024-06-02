@@ -1,15 +1,25 @@
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Link } from 'expo-router';
 
-import ThemeProvider, { useThemeContent } from "../context/themeContext";
-//import { Cabecalho } from "../components/cabecalho";
+import { useThemeContent } from "../context/themeContext";
+import { Cabecalho } from "../components/cabecalho";
 export default function Index() {
 
   const { temaAtual, selectTheme } = useThemeContent()
 
   return (
       <View style={styles.container}>
+        <Cabecalho />
         <Text>{temaAtual}</Text>
-        <Button title="trocar" onPress={selectTheme}></Button>
+
+        <View>
+          <Text>Name</Text>
+          <TextInput />
+          <Text>Password</Text>
+          <TextInput />
+        </View>
+
+        <Link href={"/home"}> home </Link>
       </View>
   );
 }

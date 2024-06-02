@@ -4,30 +4,87 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { Button } from "react-native";
+import { Button, View, Text, TouchableOpacity } from "react-native";
 
 // Passo 1: Definindo o contexto
 
+type Theme = {
+  header: {
+    height: number;
+    width: number | string;
+    backgroundColor: string;
+    alignItems: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'space-between' | 'space-around' | 'space-evenly';
+    justifyContent: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+  };
+  button: {
+    width: number;
+    height: number;
+    backgroundColor: string;
+    borderRadius: number;
+    alignItems: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'space-between' | 'space-around' | 'space-evenly';
+    justifyContent: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+  };
+  textButton: {
+    color: string;
+  };
+};
+
+const lightTheme: Theme = {
+  header: {
+    height: 40,
+    width: "100%",
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    width: 200,
+    height: 30,
+    backgroundColor: "red",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textButton: {
+    color: "black",
+  },
+};
+
+const darkTheme: Theme = {
+  header: {
+    height: 40,
+    width: "100%",
+    backgroundColor: "black",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  button: {
+    width: 200,
+    height: 30,
+    backgroundColor: "green",
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textButton: {
+    color: "black",
+  },
+};
+
 type ThemeContextProps = {
-  temaAtual: string;
+  temaAtual: Theme;
   selectTheme: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextProps | null>(null);
 
-// passo 2: Definindo o provider com a variavel tema e a function para alterar o tema atual
+// Passo 2: Definindo o provider com a variável tema e a função para alterar o tema atual
 
-export default function ThemeProvider({ children }: PropsWithChildren) {
-  const [temaAtual, setTemaAtual] = useState("light");
+export default function ThemeProvider({ children }: PropsWithChildren<{}>) {
+  const [temaAtual, setTemaAtual] = useState<Theme>(lightTheme);
 
   const selectTheme = () => {
-    if (temaAtual === "light") {
-      setTemaAtual("dark");
-      console.log("dark");
-    } else {
-      setTemaAtual("light");
-      console.log("outras");
-    }
+    setTemaAtual((prevTheme) => (prevTheme === lightTheme ? darkTheme : lightTheme));
   };
 
   return (
@@ -37,13 +94,14 @@ export default function ThemeProvider({ children }: PropsWithChildren) {
   );
 }
 
-// passo 3: Definindo o hook para acesso das propriedades do context
+// Passo 3: Definindo o hook para acesso das propriedades do contexto
 
 export function useThemeContent() {
   const context = useContext(ThemeContext);
 
-  if (context) {
-    return context;
+  if (!context) {
+    throw new Error("useThemeContent deve ser usado dentro de um ThemeProvider");
   }
-  throw new Error(`erro context ${context};`);
+
+  return context;
 }
