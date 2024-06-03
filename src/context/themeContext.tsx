@@ -4,71 +4,47 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { Button, View, Text, TouchableOpacity } from "react-native";
+import { Button, FlexAlignType } from "react-native";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 
 // Passo 1: Definindo o contexto
 
 type Theme = {
   header: {
-    height: number;
-    width: number | string;
-    backgroundColor: string;
-    alignItems: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'space-between' | 'space-around' | 'space-evenly';
-    justifyContent: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
+    backgroundColor: string,
   };
   button: {
-    width: number;
-    height: number;
-    backgroundColor: string;
-    borderRadius: number;
-    alignItems: 'center' | 'flex-start' | 'flex-end' | 'stretch' | 'baseline' | 'space-between' | 'space-around' | 'space-evenly';
-    justifyContent: 'center' | 'flex-start' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
-  };
+    backgroundColor: string,
+    width: number,
+    heigth: number,
+    justifyContent: string,
+    marginButton: number,
+    alignItems: string,
+  },
   textButton: {
     color: string;
-  };
-};
-
-const lightTheme: Theme = {
-  header: {
-    height: 40,
-    width: "100%",
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
   },
-  button: {
-    width: 200,
-    height: 30,
-    backgroundColor: "red",
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
+  container: {
+    backgroundColor: string,
+    padding: 10,
+    flex: number,
+    justifyContent: string,
+    alignItems: string
   },
-  textButton: {
-    color: "black",
+  card: {
+    weigth: number | string,
+    heigth: number | string,
+    backgroundColor: string;
+    padding: number,
   },
-};
-
-const darkTheme: Theme = {
-  header: {
-    height: 40,
-    width: "100%",
-    backgroundColor: "black",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  button: {
-    width: 200,
-    height: 30,
-    backgroundColor: "green",
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textButton: {
-    color: "black",
-  },
+  input: {
+    borderWidth: number,
+    borderColor: string,
+    backgroundColor: string,
+    borderRadius: number | string,
+    color?: string,
+    padding: string | number
+  }
 };
 
 type ThemeContextProps = {
@@ -78,13 +54,93 @@ type ThemeContextProps = {
 
 const ThemeContext = createContext<ThemeContextProps | null>(null);
 
-// Passo 2: Definindo o provider com a variável tema e a função para alterar o tema atual
+// passo 2: Definindo o provider com a variavel tema e a function para alterar o tema atual
 
-export default function ThemeProvider({ children }: PropsWithChildren<{}>) {
+export default function ThemeProvider({ children }: PropsWithChildren) {
+  
+  const lightTheme: Theme = {
+    header: {
+      backgroundColor: "#F7F7F7",
+    },
+    button: {
+      backgroundColor: "blue",
+      width: 100,
+      heigth: 50,
+      justifyContent: "center",
+      alignItems: "center",
+      marginButton: 30
+    },
+    textButton: {
+      color: "black",
+    },
+    container: {
+      backgroundColor: "white",
+      padding: 10,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    card: {
+      weigth: "50%",
+      heigth: "50%",
+      backgroundColor: "#F7F7F7",
+      padding: 20,
+    },
+    input: {
+      borderWidth: 2,
+      borderColor: "black",
+      backgroundColor: "#E7F0FC",
+      borderRadius: 8,
+      padding: 6,
+    },
+  };
+
+  const darkTheme: Theme = {
+    header: {
+      backgroundColor: "black",
+    },
+    button: {
+      backgroundColor: "#616161",
+      width: 100,
+      heigth: 70,
+      justifyContent: "center",
+      marginButton: 30,
+      alignItems: "center",
+    },
+    textButton: {
+      color: "white",
+    },
+    container: {
+      backgroundColor: "black",
+      padding: 10,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center"
+    },
+    card: {
+      weigth: "50%",
+      heigth: "50%",
+      backgroundColor: "#4b0081",
+      padding: 20,
+    },
+    input: {
+      borderWidth: 2,
+      borderColor: "white",
+      backgroundColor: "#e6ccef",
+      borderRadius: 8,
+      color: "#060000",
+      padding: 5
+    }
+  };
+
   const [temaAtual, setTemaAtual] = useState<Theme>(lightTheme);
 
   const selectTheme = () => {
-    setTemaAtual((prevTheme) => (prevTheme === lightTheme ? darkTheme : lightTheme));
+    if (temaAtual.header.backgroundColor === lightTheme.header.backgroundColor) {
+      setTemaAtual(darkTheme);
+    } else {
+      setTemaAtual(lightTheme);
+    }
   };
 
   return (
@@ -94,14 +150,13 @@ export default function ThemeProvider({ children }: PropsWithChildren<{}>) {
   );
 }
 
-// Passo 3: Definindo o hook para acesso das propriedades do contexto
+// passo 3: Definindo o hook para acesso das propriedades do context
 
 export function useThemeContent() {
   const context = useContext(ThemeContext);
 
-  if (!context) {
-    throw new Error("useThemeContent deve ser usado dentro de um ThemeProvider");
+  if (context) {
+    return context;
   }
-
-  return context;
+  throw new Error(`erro context ${context};`);
 }
