@@ -7,15 +7,27 @@ export const Cabecalho = () => {
   const { temaAtual, selectTheme } = useThemeContent();
 
   const styles = StyleSheet.create({
-    header: temaAtual.header,
-    button: temaAtual.button,
-    textButton: temaAtual.textButton,
+    header:  {
+      backgroundColor: temaAtual== 'light' ? "#F7F7F7" : "black",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 40
+    },
+    button: {
+      backgroundColor: temaAtual == "light" ? "blue": "#616161",
+      width: 100,
+      height: 30,
+      borderRadius: 6,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    textButton:{ 
+      color: temaAtual == "light" ? "black" : "wihte"
+    },
   })
 
-  //sconst ifTheme = temaAtual ? Light : Dark;
-
   return (
-    <View style={ [styles.header] }>
+    <View style={ styles.header }>
       <TouchableOpacity onPress={selectTheme} style={ styles.button }>
         <Text style={ styles.textButton}>alterar tema</Text>
       </TouchableOpacity>
